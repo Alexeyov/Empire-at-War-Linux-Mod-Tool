@@ -20,10 +20,43 @@ This chart is not up to date, if your OS is not present here, check the main web
 
 ![linux-distro-family-chart-with-distros-based-derivatives-i-v0-0h0jbzn8ca2d1-3766210537](https://github.com/user-attachments/assets/f5331e28-45ed-4b9d-80fb-26fab04c6fc9)
 
+
+
+
+
 # Requirements
 
 
 LOREM IPSUM WINE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
