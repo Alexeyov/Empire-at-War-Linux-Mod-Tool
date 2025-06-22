@@ -4,6 +4,8 @@ This repository is home to both the EAW_LMT tool to pack eaw mods fast to fix pe
 # Index
 
 - [Linux Concepts](#linux-concepts)
+- [Requirements](#requirements)
+- [Using EAW_LMT](#using-eaw_lmt)
 
 # Linux Concepts
 While the use of the EAW_LMT tool is simple, the requirements and setup before using it makes the needs to clarifiy a couple concepts in order to follow the instructions correctly. 
@@ -17,3 +19,16 @@ This is important to know because most instructtions regarding installing some p
 This chart is not up to date, if your OS is not present here, check the main website/wiki of your system to see which system is based on.
 
 ![linux-distro-family-chart-with-distros-based-derivatives-i-v0-0h0jbzn8ca2d1-3766210537](https://github.com/user-attachments/assets/f5331e28-45ed-4b9d-80fb-26fab04c6fc9)
+
+# Requirements
+
+
+LOREM IPSUM WINE
+
+
+
+
+
+# Using EAW_LMT
+
+YOU WILL READ
