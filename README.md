@@ -25,36 +25,9 @@ This chart is not up to date, if your OS is not present here, check the main web
 
 
 # Requirements
-
-
-LOREM IPSUM WINE
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+An EAW mod already downloaded by the Steam Workshop
+Rsync (potentially)
+Wine and Wine Mono
 
 
 
