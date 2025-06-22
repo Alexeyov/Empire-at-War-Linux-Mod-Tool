@@ -11,4 +11,5 @@ You probably have downloaded Pop OS, Manjaro, Linux mint, Cachyos, or even Steam
 This is important to know because most instructtions regarding installing some prerequisite will mention how to do it for Debian an Arch (if you have a OS that is not a fork of these 2, you are welcome to open an issue, though searching the web for the equivalent way for your system should be faster) 
 
 This chart is not up to date, if your OS is not present here, check the main website/wiki of your system to see which system is based on.
+
 ![linux-distro-family-chart-with-distros-based-derivatives-i-v0-0h0jbzn8ca2d1-3766210537](https://github.com/user-attachments/assets/f5331e28-45ed-4b9d-80fb-26fab04c6fc9)
