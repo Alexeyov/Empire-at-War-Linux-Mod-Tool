@@ -1,6 +1,10 @@
 # EAW_LMT
 This repository is home to both the EAW_LMT tool to pack eaw mods fast to fix perfomance issues particular to linux, as well as other troubleshooting tips to improve the Empire at War experience on linux distros
 
+# Index
+
+- [Linux Concepts](#linux-concepts)
+
 # Linux Concepts
 While the use of the EAW_LMT tool is simple, the requirements and setup before using it makes the needs to clarifiy a couple concepts in order to follow the instructions correctly. 
 
