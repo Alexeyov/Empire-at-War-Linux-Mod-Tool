@@ -1,12 +1,14 @@
 # Empire At War Linux ModTool
 This repository is home to the EAW_LMT tool to pack eaw mods fast and fix/improve perfomance issues particular to linux, as well as other troubleshooting tips to improve the Empire at War experience on linux distros
 
+
 # Index
 - [Linux Concepts](#linux-concepts)
 - [Requirements](#requirements)
 - [Using EAW_LMT](#using-eaw_lmt)
 - [Troubleshooting](#troubleshooting)
 - [EAW Game font](#eaw-game-font)
+- [Credits](#credits)
 
 # Introduction
 The EAW_LMT tool was created to automate a tedious process to pack mod files into .megs, in order to fix a particular stuttering present on linux. While there can be stuttering present in specific instances on mods, on linux the problem multiplies by showing up in other areas.
@@ -146,3 +148,7 @@ For other distros I recommend to manualy search for the location in your file ex
 ![LaunchOpt](https://github.com/user-attachments/assets/79a1e4b9-b4dc-4f24-aff9-699f4b46691f)
 
 [Back to Index](#index)
+
+# Credits
+
+[Lukas Grünwald](https://github.com/gruenwaldlk/eaw-build) For creating the Eaw-build tool(yvaw-build.exe)
