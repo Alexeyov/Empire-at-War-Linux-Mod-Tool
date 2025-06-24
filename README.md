@@ -100,7 +100,7 @@ After running winecfg, you should see this window
 
 You can close it once you see it
 
-If after running winecfg, mono doesn´t show, reinstall wine and run winecfg again.
+If after running winecfg, mono doesn´t show after doing ``` ls ~/.wine/drive_c/windows/mono/ ```, reinstall wine and run winecfg again.
 
 [Back to Index](#index)
 
