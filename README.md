@@ -123,3 +123,26 @@ In order to make the game load the new font, do the following:
 * Go to the path directory of that proton version. Proton folders are located in the same steam folder as your games in ```steamapps/common```
   *  Unless you are using a custom one in which case is probably in ```compatibilitytools.d``` on the base Steam folder   
 * Inside the proton folder, paste the fonts at ```files/share/fonts```
+
+[Back to Index](#index)
+
+# Other EAW tips
+![EawMods](https://github.com/user-attachments/assets/50acc8f8-02d1-4908-a7d9-8370bcaf4491)
+
+In order to add a custom launcher on steam for EAW mods. After you add StarWarsG.exe as a non steam game, you need to do the following:
+
+In the settings of that new shorcut, check the compatibility tab:
+![CheckCompat2](https://github.com/user-attachments/assets/74c1c931-5867-4de0-b702-9b4cdb1c18c0)
+
+In the shorcut tab, in the launch options, you need to add the following BEFORE ```Modpath=Mods/mod```
+
+DEBIAN
+```STEAM_COMPAT_DATA_PATH="$HOME/.steam/debian-installation/steamapps/compatdata/32470" %command% Modpath=Mods/mod```
+ARCH & FEDORA
+```STEAM_COMPAT_DATA_PATH="$HOME/.local/share/Steam/steamapps/compatdata/32470" %command% Modpath=Mods/mod```
+
+For other distros I recommend to manualy search for the location in your file explorer, and once you are at ```compatdata/32470```, copy the path and past it
+
+![LaunchOpt](https://github.com/user-attachments/assets/79a1e4b9-b4dc-4f24-aff9-699f4b46691f)
+
+[Back to Index](#index)
