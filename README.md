@@ -4,7 +4,10 @@ This repository is home to the EAW_LMT tool to pack eaw mods fast and fix/improv
 
 # Index
 - [Linux Concepts](#linux-concepts)
-  - [Steam Location](#steam-location) 
+  - [Steam Location](#steam-location)
+  - [Compatdata and Saves location](#compatdata-and-saves-location)
+  - [Different Linux OS](#different-linux-os)
+  - [Installing from terminal](#installing-from-terminal)
 - [Requirements](#requirements)
 - [Using EAW_LMT](#using-eaw_lmt)
 - [Troubleshooting](#troubleshooting)
@@ -51,8 +54,6 @@ You probably have downloaded Pop OS, Manjaro, Linux mint, Cachyos, or even Steam
 This is important to know, because most instructions for installing some prerequisite will mention how to do it for these base OS (if you have a OS that is not a fork of any of these, you are welcome to open an issue, though searching the web for the equivalent way for your system will always be faster) 
 
 This chart is not up to date, if your OS is not present here, check the main website/wiki of your system to see which system is based on, and what commands apply.
-
-## Linux Distros
 
 | DEBIAN                                                | ARCH                                 | FEDORA                               | 
 | --------------------------------------------------- | -------------------------------------------- | -------------------------------------------- | 
