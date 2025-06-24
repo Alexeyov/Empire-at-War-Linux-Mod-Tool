@@ -76,7 +76,7 @@ Installing rsync for example on Linux Mint:
 * Wine
   * Wine is the original translation tool to run windows apps on Linux which Proton is based on
   * Check if you have it by open a terminal and type ``` wine --version ```
-  * Proton from steam doesn't count, you need wine on its own (important to note that in order to play games on steam with Proton you don't Wine, you just need Wine so a specific tool to pack the files in .megs can run) 
+  * Proton from steam doesn't count, you need wine on its own (important to note that in order to play games on steam with Proton you don't need Wine, you just need Wine so a specific tool to pack the files in .megs can run) 
 
 To install them, on a terminal anywhere:
 | DEBIAN                                                | ARCH                                 | FEDORA                               | 
