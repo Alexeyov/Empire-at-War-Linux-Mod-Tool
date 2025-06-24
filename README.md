@@ -69,12 +69,14 @@ Installing rsync for example on Linux Mint:
 ```sudo apt install rsync```  
 [Back to Index](#index)
 # Requirements
-* An EAW mod already downloaded by the Steam Workshop
+* An EAW mod already downloaded by the Steam Workshop (duh)
 * Rsync
+  * Rsync is a tool for copying/moving/transfer files with extra options and features
   * Check if you have it by open a terminal and type ``` rsync --version ```
-* Wine 
+* Wine
+  * Wine is the original translation tool to run windows apps on Linux which Proton is based on
   * Check if you have it by open a terminal and type ``` wine --version ```
-  * Proton from steam doesn't count, you need wine on its own
+  * Proton from steam doesn't count, you need wine on its own (important to note that in order to play games on steam with Proton you don't Wine, you just need Wine so a specific tool to pack the files in .megs can run) 
 
 To install them, on a terminal anywhere:
 | DEBIAN                                                | ARCH                                 | FEDORA                               | 
