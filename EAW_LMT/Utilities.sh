@@ -9,7 +9,7 @@ source file_arrays.sh
 
 CAPITAL()
 {
-    find . -depth -type d | while IFS= read -r dir; do
+    find ../ -depth -type d | while IFS= read -r dir; do
         base=$(basename "$dir")
         parent=$(dirname "$dir")
         newname=$(uppercase_folder "$base")

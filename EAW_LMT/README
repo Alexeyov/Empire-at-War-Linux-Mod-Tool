@@ -1,0 +1,40 @@
+# Requirements
+* An EAW mod already downloaded by the Steam Workshop (duh)
+* Rsync
+  * Rsync is a tool for copying/moving/transfer files with extra options and features
+  * Check if you have it by open a terminal and type ``` rsync --version ```
+* Wine
+  * Wine is the original translation tool to run windows apps on Linux which Proton is based on
+  * Check if you have it by open a terminal and type ``` wine --version ```
+  * Proton from steam doesn't count, you need wine on its own (important to note that in order to play games on steam with Proton you don't need Wine, you just need Wine so a specific tool to pack the files in .megs can run) 
+
+To install them, on a terminal anywhere:
+| DEBIAN                    | ARCH                    | FEDORA                 | 
+| --------------------      | ----------------------- | ------             --- | 
+| sudo apt install rsync    |   sudo pacman -S rsync  | sudo dnf install rsync |
+| sudo apt install wine     |   sudo pacman -S wine   | sudo dnf install wine  |
+
+
+* Wine Mono
+  * If you ran winecfg at least once after installing wine, you should have it
+  * Check if you have it by open an terminal from your username folder and type ``` ls ~/.wine/drive_c/windows/mono/ ```
+
+After running winecfg, you should see window with different tabs and settings that looks from Windows
+
+You can close it once you see it
+
+If after running winecfg, mono doesn´t show, reinstall wine and run winecfg again.
+
+# Using EAW_LMT
+* Once downloaded, extract the content anywhere.
+* Check the location of the EAW mod you want to process, EAW mods are located in ```/steamapps/workshop/content/32470```
+* Copy or move the ```EAW_LMT``` folder next to the Data folder of the EAW mod (the folder, not the files)
+* Inside the ```EAW_LMT``` folder you will see a ```EAWM_BUILD.sh``` file, either:
+  * Open a terminal in that location (usually right clicking in the file explorer should show the option) and type: ```bash EAWM_build.sh```
+  * Change the permission of the file to be allowed to be run as a programm and double click on it (select to run in a terminal if the option shows up)
+* Wait and let it do it's thing.
+* Either because it completes all operations or something went wrong, you will see the following ```Press Enter to close this window...```
+* If everythign was fine, you now has a local mod and you will need to set your launch options with ```MODPATH=Mods/``` instead of ```STEAMMOD=```
+# Troubleshooting
+* Most problems will be related to some requirement that wasn't fullfiled
+* For any problem a ```EAWM_log.txt``` file should show up in the same location, if the problem is not clear, feel free to open an issue on this git uploading the log.
