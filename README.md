@@ -8,6 +8,7 @@ This repository is home to the EAW_LMT tool to pack eaw mods fast and fix/improv
 - [Using EAW_LMT](#using-eaw_lmt)
 - [Troubleshooting](#troubleshooting)
 - [EAW Game font](#eaw-game-font)
+- [Other EAW tips](#other-eaw-tips)
 - [Credits](#credits)
 
 # Introduction
@@ -129,6 +130,7 @@ In order to make the game load the new font, do the following:
 [Back to Index](#index)
 
 # Other EAW tips
+##Custom launcher for mods
 ![EawMods](https://github.com/user-attachments/assets/50acc8f8-02d1-4908-a7d9-8370bcaf4491)
 
 In order to add a custom launcher on steam for EAW mods. After you add StarWarsG.exe as a non steam game, you need to do the following:
