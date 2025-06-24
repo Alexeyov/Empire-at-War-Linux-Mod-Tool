@@ -2,7 +2,6 @@
 This repository is home to both the EAW_LMT tool to pack eaw mods fast to fix perfomance issues particular to linux, as well as other troubleshooting tips to improve the Empire at War experience on linux distros
 
 # Index
-
 - [Linux Concepts](#linux-concepts)
 - [Requirements](#requirements)
 - [Using EAW_LMT](#using-eaw_lmt)
@@ -39,7 +38,7 @@ To Install new packages in general from terminal
 
 Installing rsync for example on Linux Mint:
 ```sudo apt install rsync```  
-
+[Back to Index](#index)
 # Requirements
 * An EAW mod already downloaded by the Steam Workshop
 * Rsync
@@ -67,6 +66,7 @@ You can close it once you see it
 
 If after running winecfg, mono doesn´t show, reinstall wine and run winecfg again.
 
+[Back to Index](#index)
 
 # Using EAW_LMT
 * Once downloaded, extract the content anywhere.
@@ -82,7 +82,7 @@ If after running winecfg, mono doesn´t show, reinstall wine and run winecfg aga
 * Most problems will be related to some requirement that wasn't fullfiled
 * For any problem a EAWM_log.txt file should show up in the same location, if the problem is not clear, feel free to open an issue uploading the log.
 
-
+[Back to Index](#index)
 # EAW Game font
 There is an odd interacction where Proton returns the correct font back to the game, but does it by giving back the family-name value of the font, while the game is waiting for the type-name. 
 A copy of a "tweaked" version of the font can be found here
