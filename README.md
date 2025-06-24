@@ -4,6 +4,7 @@ This repository is home to the EAW_LMT tool to pack eaw mods fast and fix/improv
 
 # Index
 - [Linux Concepts](#linux-concepts)
+  - [Steam Location](#steam-location) 
 - [Requirements](#requirements)
 - [Using EAW_LMT](#using-eaw_lmt)
 - [Troubleshooting](#troubleshooting)
