@@ -14,11 +14,25 @@ While the use of the EAW_LMT tool is simple, the requirements and setup before u
 
 ## Debian and Arch based/fork distros
 
-You probably have downloaded Pop OS, Manjaro, Linux mint, Cachyos, or even SteamOS (maybe looking for makign eaw mods run better on the steam deck). Most distros downloaded are forks or variations of 2 main OS, Debian and Arch. 
+You probably have downloaded Pop OS, Manjaro, Linux mint, Cachyos, or even SteamOS (maybe looking for making eaw mods run better on the steam deck). Most distros downloaded are forks or variations of a couple main OS, these are for the most part Debian, Arch, Fedora. 
 
 This is important to know because most instructtions regarding installing some prerequisite will mention how to do it for Debian an Arch (if you have a OS that is not a fork of these 2, you are welcome to open an issue, though searching the web for the equivalent way for your system should be faster) 
 
 This chart is not up to date, if your OS is not present here, check the main website/wiki of your system to see which system is based on.
+
+## Tested Games
+
+| DEBIAN                                                | ARCH                                 | FEDORA                               | 
+| --------------------------------------------------- | -------------------------------------------- | -------------------------------------------- | 
+| Ubuntu      |   SteamOS    | Bazzite |
+| Kubuntu      | Manjaro | Nobara |
+| Linux Mint   | Garuda  |  |
+| PopOS     |CachyOS  |  |
+| Elementary OS                |  |  |
+| Drauger OS               |  |  |
+|                  |  |  |
+|                 |  |  |
+|                 |  |  |
 
 ![linux-distro-family-chart-with-distros-based-derivatives-i-v0-0h0jbzn8ca2d1-3766210537](https://github.com/user-attachments/assets/f5331e28-45ed-4b9d-80fb-26fab04c6fc9)
 
@@ -29,6 +43,12 @@ This chart is not up to date, if your OS is not present here, check the main web
 # Requirements
 * An EAW mod already downloaded by the Steam Workshop
 * Rsync
+ * Check if you have it by open a terminal and type ``` rsync --version ```
+ * If nothing shows or rsync shows as not installed, install with
+
+| DEBIAN                                                | ARCH                                 | FEDORA                               | 
+| --------------------------------------------------- | -------------------------------------------- | -------------------------------------------- | 
+| sudo apt install rsync      |   sudo pacman -S rsync    | sudo dnf install rsync |
 * Wine
 * Wine Mono
 
