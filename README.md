@@ -1,5 +1,5 @@
-# EAW_LMT
-This repository is home to both the EAW_LMT tool to pack eaw mods fast to fix perfomance issues particular to linux, as well as other troubleshooting tips to improve the Empire at War experience on linux distros
+# Empire At War Linux ModTool
+This repository is home to the EAW_LMT tool to pack eaw mods fast and fix/improve perfomance issues particular to linux, as well as other troubleshooting tips to improve the Empire at War experience on linux distros
 
 # Index
 - [Linux Concepts](#linux-concepts)
@@ -8,6 +8,27 @@ This repository is home to both the EAW_LMT tool to pack eaw mods fast to fix pe
 - [Troubleshooting](#troubleshooting)
 - [EAW Game font](#eaw-game-font)
 
+# Introduction
+The EAW_LMT tool was created to automate a tedious process to pack mod files into .megs, in order to fix a particular stuttering present on linux. While there can be stuttering present in specific instances on mods, on linux the problem multiplies by showing up in other areas.
+
+The reason for this stuttering is due to how mods organize their files. While the base game have everything packed into .megs, most mods have their audio, models and textures files loose. These folders can have thousands of files and be up 10 GBs in size, this in combination on how the game engine handles files, creates the extra stuttering. All of this create stress to the Proton layer, which have to keep up with the big number of file operations call for folders with an insane amount of files.
+
+The answer to this is to pack the files back into several megs. However because doing so is quite tedious, I created this tool that automates the whole process, which should work on most Linux distros (if you are reading this you are probably covered unless you have some very weird and specific linux os).
+
+What does the tool do?
+ * It creates a new folder under corruption/mods/modname, making this a local mod is required to avoid steam workshop messing with it
+ * It copies most mod files to the new location
+ * The content of Audio, Textures* and Models gets moved to a TEMP folder where it is processed and packed into .megs
+ * The megs then get moved to the mods location
+ * After that you will launch the new mod by setting ```MODPATH=Mods/modname``` in the steam launcher settings of EAW
+ * ```modname``` will be the same id number as it is shown in the workshop
+
+(In the case of textures, some files that share the same name of base game files need to be loose, this however do not impact performance)
+
+Also in the process of researching the reason of this stuttering and the tools creating I was able to find a fix to the game's font not loading properly. [EAW Game font](#eaw-game-font)
+
+[Back to Index](#index)
+
 # Linux Concepts
 Some concept clarification in order to follow the instructions easier. 
 
@@ -15,7 +36,9 @@ Some concept clarification in order to follow the instructions easier.
 Usually in your personal folder ```home/username``` there is a hidden folder ./steam, your file explorer should have an option by just right clicking to show hidden files(otherwise just check the settings). From inside there should be a direct link to the steam contents where you will find ```steamapps``` and inside ```common``` where the game and most proton versions are located, and the ```workshop``` folder which leads to downloaded mods.
 
 ## Compatdata and Saves location
-Inside ```steamapps``` there is the ```compatdata``` folder, this folder have a bunch of id folders, which have the same id as your games. 32470 is the id for EAW. These replicate the folder hierarchy of windows, your saves should be at ```32470/pfx/drive_c/users/steamuser/Saved Games/Petroglyph/Empire At War - Forces of Corruption/Save ```
+Inside ```steamapps``` there is the ```compatdata``` folder, this folder have a bunch of id folders, which have the same steamid as your games, 32470 being the id for EAW. These replicate the folder hierarchy of windows, and have files needed in order to run your games properly. 
+
+EAW saves should be at ```32470/pfx/drive_c/users/steamuser/Saved Games/Petroglyph/Empire At War - Forces of Corruption/Save ```
 
 ## Different Linux OS
 
