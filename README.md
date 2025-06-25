@@ -92,7 +92,7 @@ To install them, on a terminal anywhere:
 
 * Wine Mono
   * If you ran winecfg at least once after installing wine, you should have it
-  * Check if you have it navigating to  ```personalfolder/.wine/drive_c/windows/mono/ ``` you should see mono 2.0 or similar
+  * Check if you have it by navigating to  ```personalfolder/.wine/drive_c/windows/mono/ ``` you should see mono 2.0 or similar
   * Or faster by copy pasting this on an terminal open from your username folder ``` ls ~/.wine/drive_c/windows/mono/ ```
 
 After running winecfg, you should see this window, you can close it once you see it
