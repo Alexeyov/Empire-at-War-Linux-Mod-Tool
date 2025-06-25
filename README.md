@@ -92,13 +92,12 @@ To install them, on a terminal anywhere:
 
 * Wine Mono
   * If you ran winecfg at least once after installing wine, you should have it
-  * Check if you have it by open an terminal from your username folder and type ``` ls ~/.wine/drive_c/windows/mono/ ```
+  * Check if you have it navigating to  ```personalfolder/.wine/drive_c/windows/mono/ ``` you should see mono 2.0 or similar
+  * Or faster by copy pasting this on an terminal open from your username folder ``` ls ~/.wine/drive_c/windows/mono/ ```
 
-After running winecfg, you should see this window
+After running winecfg, you should see this window, you can close it once you see it
 
 ![winecfg](https://github.com/user-attachments/assets/17212ab3-0602-486e-ab50-08801a806a32)
-
-You can close it once you see it
 
 If after running winecfg, mono doesn´t show after doing ``` ls ~/.wine/drive_c/windows/mono/ ```, reinstall wine and run winecfg again.
 
