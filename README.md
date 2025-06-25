@@ -104,7 +104,7 @@ If after running winecfg, mono doesn´t show after doing ``` ls ~/.wine/drive_c/
 [Back to Index](#index)
 
 # Using EAW_LMT
-* Once downloaded, extract the content anywhere.
+* Once downloaded from [releases](https://github.com/Alexeyov/Empire-at-War-Linux-Mod-Tool/releases), extract the content anywhere.
 * Check the location of the EAW mod you want to process, EAW mods are located in ```/steamapps/workshop/content/32470```
 * Copy or move the ```EAW_LMT``` folder next to the Data folder of the EAW mod (the folder, not the files)
 * Inside the ```EAW_LMT``` folder you will see a ```EAWM_BUILD.sh``` file, either:
