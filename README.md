@@ -121,7 +121,7 @@ If after running winecfg, mono doesn´t show after doing ``` ls ~/.wine/drive_c/
   * Open a terminal in that location (usually right clicking in the file explorer should show the option) and type: ```bash EAWM_build.sh```
   * Change the permission of the file to be allowed to be run as a programm and double click on it (select to run in a terminal if the option shows up)
 * Wait and let it do it's thing.
-* Either because it completes all operations or something went wrong, you will see the following ```Press Enter to close this window...```
+* Either because it completes all operations or something went wrong, you will see the following ```Press Enter to finish the program...```
 * If everythign was fine, you now has a local mod and you will need to set your launch options with ```MODPATH=Mods/``` instead of ```STEAMMOD=```
 # Troubleshooting
 * Most problems will be related to some requirement that wasn't fullfiled
@@ -142,7 +142,7 @@ In order to make the game load the new font, do the following:
 [Back to Index](#index)
 
 # Other EAW tips
-##Custom launcher for mods
+## Custom launcher for mods
 
 ![EawMods](https://github.com/user-attachments/assets/50acc8f8-02d1-4908-a7d9-8370bcaf4491)
 
@@ -167,4 +167,5 @@ For other distros I recommend to manualy search for the location in your file ex
 # Credits
 
 [Lukas Grünwald](https://github.com/gruenwaldlk/eaw-build) For creating the Eaw-build tool(yvaw-build.exe)
+
 OldPalSteve Testing and Feedback
