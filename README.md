@@ -114,6 +114,7 @@ If after running winecfg, mono doesn´t show after doing ``` ls ~/.wine/drive_c/
 [Back to Index](#index)
 
 # Using EAW_LMT
+* This tool is only needed for the big mods, submods usually don´t have the amount of texture/model files that would bring the game down on Proton.
 * Once downloaded from [releases](https://github.com/Alexeyov/Empire-at-War-Linux-Mod-Tool/releases), extract the content anywhere.
 * Check the location of the EAW mod you want to process, EAW mods are located in ```/steamapps/workshop/content/32470```
 * Copy or move the ```EAW_LMT``` folder next to the Data folder of the EAW mod (the folder, not the files)
