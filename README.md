@@ -4,6 +4,7 @@ This repository is home to the EAW_LMT tool to pack eaw mods fast and fix/improv
 
 # Index
 - [Linux Concepts](#linux-concepts)
+  - [State of EAW on Linux](#state-of-eaw-on-linux)
   - [Steam Location](#steam-location)
   - [Compatdata and Saves location](#compatdata-and-saves-location)
   - [Different Linux OS](#different-linux-os)
@@ -16,28 +17,29 @@ This repository is home to the EAW_LMT tool to pack eaw mods fast and fix/improv
 - [Credits](#credits)
 
 # Introduction
-The EAW_LMT tool was created to automate a tedious process to pack mod files into .megs, in order to fix a particular stuttering present on linux. While there can be stuttering present in specific instances on mods, on linux the problem multiplies by showing up in other areas.
+The EAW_LMT is a tool created to fix the performance problems of EAW present in Linux (mainly a particular stuttering). This is achieved by automating a tedious process to pack mod files into .megs. While there can be stuttering present in specific instances on mods, on linux the problem multiplies by showing up in most areas.
 
-The reason for this stuttering is due to how mods organize their files. While the base game have everything packed into .megs, most mods have their audio, models and textures files loose. These folders can have thousands of files and be up 10 GBs in size, this in combination on how the game engine handles files, creates the extra stuttering. All of this create stress to the Proton layer, which have to keep up with the big number of file operations call for folders with an insane amount of files.
+The reason for this stuttering is due to how mods have their files setup up. While the base game have everything packed into .megs, most mods have all their files loose (main reason is make it easy for development purposes, specially with submods). There are 2 folders in particular that create all the problems (Textures and Models) These folders can have thousands of files and be multiple GBs in size all at the same level (meaning the files are not distributed in subfolders, unlike the rest of the files). This create stress to Proton, which have to keep up with the big number of file operations call for these folders.
 
-The answer to this is to pack the files back into several megs. However because doing so is quite tedious, I created this tool that automates the whole process, which should work on most Linux distros (if you are reading this you are probably covered unless you have some very weird and specific linux os).
+The workaround is to replicate the base game by packing the files back into several megs. However because doing so is quite tedious, I created this tool that automates the whole process.
 
 What does the tool do?
- * It creates a new folder under corruption/mods/modname, making this a local mod is required to avoid steam workshop messing with it
+ * It creates a new folder under /steamapps/common/Star Wars Empire at War/corruption/Mods/modname, making this a local mod is required to avoid steam workshop messing with it (local mod is a mod that is within the mods folder of EAW, instead of the usual workshop folder of Steam)
  * It copies most mod files to the new location
- * The content of Audio, Textures* and Models gets moved to a TEMP folder where it is processed and packed into .megs
+ * The content of Textures* and Models gets moved to a TEMP folder where it is processed and packed into .megs
  * The megs then get moved to the mods location
  * After that you will launch the new mod by setting ```MODPATH=Mods/modname``` in the steam launcher settings of EAW
  * ```modname``` will be the same id number as it is shown in the workshop
 
-(In the case of textures, some files that share the same name of base game files need to be loose, this however do not impact performance)
-
-Also in the process of researching the reason of this stuttering and the tools creating I was able to find a fix to the game's font not loading properly. [EAW Game font](#eaw-game-font)
+*(In the case of Textures, some files that share the same name of base game files need to be loose, this however do not impact performance)
 
 [Back to Index](#index)
 
 # Linux Concepts
 Some concept clarification in order to follow the instructions easier. 
+
+## State of EAW on Linux
+Eaw base game and the Foc expansion (steam version) are 100% compatible with Proton on any Linux OS, however as of writing this (05-September-2025) I am not aware of any version of proton (From Steam or Custom ones), dedicated gaming linux app, Linux OS, nor any version of the Linux kernel, that allows playing modded EAW out of the box. So for the time being this tool is needed to play modded on Linux.
 
 ## Steam location
 Usually in your personal folder ```home/username``` there is a hidden folder ./steam, your file explorer should have an option by just right clicking to show hidden files(otherwise just check the settings). From inside there should be a direct link to the steam contents where you will find ```steamapps``` and inside ```common``` where the game and most proton versions are located, and the ```workshop``` folder which leads to downloaded mods.
@@ -51,7 +53,7 @@ EAW saves should be at ```32470/pfx/drive_c/users/steamuser/Saved Games/Petrogly
 
 You probably have downloaded Pop OS, Manjaro, Linux mint, Cachyos, or even SteamOS (maybe looking for making eaw mods run better on the steam deck). Most distros downloaded are forks or variations of a couple main OS, usually Debian, Arch, Fedora. 
 
-This is important to know, because most instructions for installing some prerequisite will mention how to do it for these base OS (if you have a OS that is not a fork of any of these, you are welcome to open an issue, though searching the web for the equivalent way for your system will always be faster) 
+This is important to know, because most instructions for installing some prerequisite will mention how to do it for these base OS, however exceptions like Bazzite may apply. In any case be prepared to search the web for the equivalent way for your system on how to do things.
 
 This chart is not up to date, if your OS is not present here, check the main website/wiki of your system to see which system is based on, and what commands apply.
 
@@ -70,17 +72,22 @@ To Install new packages in general from terminal
 | --------------------------------------------------- | -------------------------------------------- | -------------------------------------------- | 
 | sudo apt install     |   sudo pacman -S   | sudo dnf install |
 
+Known Exceptions:
+  -Bazzite: sudo rpm-ostree install 
+
 Installing rsync for example on Linux Mint:
 ```sudo apt install rsync```  
 [Back to Index](#index)
 # Requirements
+* Need to run the base game and Foc at least one (activate proton in the compatibility tab on the game properties on Steam)
 * An EAW mod already downloaded by the Steam Workshop (duh)
 * Rsync
   * Rsync is a tool for copying/moving/transfer files with extra options and features
   * Check if you have it by open a terminal and type ``` rsync --version ```
 * Wine
-  * Wine is the original translation tool to run windows apps on Linux which Proton is based on
+  * Wine is the compatibility layer to run windows apps on Linux which Proton is based on
   * Check if you have it by open a terminal and type ``` wine --version ```
+  * The Flatpak version of Wine WON´T work for this.
   * Proton from steam doesn't count, you need wine on its own (important to note that in order to play games on steam with Proton you don't need Wine, you just need Wine so a specific tool to pack the files in .megs can run) 
 
 To install them, on a terminal anywhere:
@@ -91,7 +98,7 @@ To install them, on a terminal anywhere:
 
 
 * Wine Mono
-  * If you ran winecfg at least once after installing wine, you should have it
+  * If you ran ```winecfg``` on a terminal at least once after installing wine, you should have it
   * Check if you have it by navigating to  ```personalfolder/.wine/drive_c/windows/mono/ ``` you should see mono 2.0 or similar
   * Or faster by copy pasting this on an terminal open from your username folder ``` ls ~/.wine/drive_c/windows/mono/ ```
 
@@ -99,7 +106,10 @@ After running winecfg, you should see this window, you can close it once you see
 
 ![winecfg](https://github.com/user-attachments/assets/17212ab3-0602-486e-ab50-08801a806a32)
 
-If after running winecfg, mono doesn´t show after doing ``` ls ~/.wine/drive_c/windows/mono/ ```, reinstall wine and run winecfg again.
+If after running winecfg, mono doesn´t show after doing ``` ls ~/.wine/drive_c/windows/mono/ ```, either:
+  * Reinstall wine and run ```winecfg``` again.
+  * After installing wine, do ```wine --version``` on a terminal, then go to https://dl.winehq.org/wine/wine-mono/ to download the .msi file for your wine version.
+      * Install this file by running the following command on a terminal located in the same location as the file: ```wine msiexec -i  wine-mono-10.1.0-x86.msi``` (replace wine-mono-10.1.0-x86.msi with the file name you may have)
 
 [Back to Index](#index)
 
@@ -119,7 +129,8 @@ If after running winecfg, mono doesn´t show after doing ``` ls ~/.wine/drive_c/
 
 [Back to Index](#index)
 # EAW Game font
-There is an odd interacction where Proton returns the correct font back to the game, but does it by giving back the family-name value of the font, while the game is waiting for the type-name. 
+In the process of researching the reason of modded EAW's poor perfomance I was able to create a fix to the game's font not loading properly.
+There is an odd interaction where Proton returns the correct font back to the game, but does it by giving back the family-name value of the font, while the game is waiting for the type-name. 
 A copy of a "tweaked" version of the font can be found [here](https://www.dropbox.com/scl/fi/cn94vw9mjuq0rt6s95z3z/EaW-Font-Proton.zip?rlkey=sxbg6dio45en9a2vox1dhwt3d&st=cn13oylc&dl=0)
 In order to make the game load the new font, do the following:
 * Extract the fonts
@@ -132,6 +143,7 @@ In order to make the game load the new font, do the following:
 
 # Other EAW tips
 ##Custom launcher for mods
+
 ![EawMods](https://github.com/user-attachments/assets/50acc8f8-02d1-4908-a7d9-8370bcaf4491)
 
 In order to add a custom launcher on steam for EAW mods. After you add StarWarsG.exe as a non steam game, you need to do the following:
@@ -155,3 +167,4 @@ For other distros I recommend to manualy search for the location in your file ex
 # Credits
 
 [Lukas Grünwald](https://github.com/gruenwaldlk/eaw-build) For creating the Eaw-build tool(yvaw-build.exe)
+OldPalSteve Testing and Feedback
