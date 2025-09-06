@@ -34,7 +34,7 @@ If after running winecfg, mono doesn´t show, reinstall wine and run winecfg aga
 * Check the location of the EAW mod you want to process, EAW mods are located in ```/steamapps/workshop/content/32470```
 * Copy or move the ```EAW_LMT``` folder next to the Data folder of the EAW mod (the folder, not the files)
 * Inside the ```EAW_LMT``` folder you will see a ```EAWM_BUILD.sh``` file, either:
-  * Open a terminal in that location (usually right clicking in the file explorer should show the option) and type: ```bash EAWM_build.sh```
+  * Open a terminal in that location (usually right clicking in the file explorer should show the option) and type: ```bash EAWM_BUILD.sh```
   * Change the permission of the file to be allowed to be run as a programm and double click on it (select to run in a terminal if the option shows up)
 * Wait and let it do it's thing.
 * Either because it completes all operations or something went wrong, you will see the following ```Press Enter to close this window...```
