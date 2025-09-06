@@ -1,26 +1,31 @@
 #!/bin/bash
 
 # "================================================================================"
-# "EAW Linux ModTool v1.0.0 2025"
+# "EAW Linux ModTool v1.0.1 2025"
 # "By Alexey Skywalker "
 # "================================================================================"
 
 source Utilities.sh
 
-TOOL=("PROCESSOR.sh" "file_arrays.sh" "Utilities.sh" "yvaw-build.exe" "build.cfg" "megaMODfiles.xml")
+TOOL=("PROCESSOR.sh" "file_arrays.sh" "Utilities.sh" "yvaw-build.exe" "build.cfg" "modmegafiles.xml" "basemegafiles.xml")
 MOD_NAME="EAWMOD"
 
 INITIAL_CHECK()
 {
+    echo "CHECKING REQUIREMENTS:"
     if command -v wine &> /dev/null; then
         echo "Wine is installed: $(wine --version)"
     else
-        echo "Wine is not installed. Please install it using your package manager."
-        echo "You can install it with:"
+        echo "WARNING: Wine is not installed."
+        echo "Please install it from the terminal using the for package management system command of your system:"
+        echo "Examples:"
         echo "      Debian distros: sudo apt install wine"
         echo "      Arch distros: sudo pacman -S wine"
         echo "      Fedora distros: sudo dnf install wine"
-        echo "IMPORTANT: After installing wine, run winecfg in a terminal and let it do its work"
+        echo "IMPORTANT:"
+        echo "      Please check what command is used by your system"
+        echo "      Flatpak version of wine won´t work"
+        echo "      After installing wine, run winecfg in a terminal and let it do its work"
         echo "Afterwards open a new terminal in your home folder, then"
         echo "run ls ~/.wine/drive_c/windows/mono/ , you should see mono2.0 or similar, mono is REQUIRED to run this program"
         read -p "Press Enter to close this window..."
@@ -29,10 +34,12 @@ INITIAL_CHECK()
 
     if ! command -v rsync &> /dev/null; then
         echo "WARNING: rsync is not installed and is required."
-        echo "You can install it with:"
+        echo "Please install it from the terminal using the for package management system command of your system:"
+        echo "Examples:"
         echo "      Debian distros: sudo apt install rsync"
         echo "      Arch distros: sudo pacman -S rsync"
         echo "      Fedora distros: sudo dnf install rsync"
+        echo "IMPORTANT: Please check what command is used by your system"
         read -p "Press Enter to close this window..."
         exit 1
     fi
@@ -50,7 +57,7 @@ INITIAL_CHECK()
     fi
 
     for element in "${TOOL[@]}"; do
-        Cscript_dirHECK_FILE $element
+        CHECK_FILE $element
     done
     MOD_NAME="$(basename "$(dirname "$script_dir")")"
     echo -e "CHECK COMPLETE. PROCEEDING \n"
@@ -82,7 +89,7 @@ fi
 
 
 echo "================================================================================"
-echo "EAW Linux ModTool v1.0.0 2025"
+echo "EAW Linux ModTool v1.0.1 2025"
 echo "By Alexey Skywalker "
 echo "================================================================================"
 sleep 0.5
@@ -103,4 +110,4 @@ echo "MODPATH=Mods/$MOD_NAME"
 echo "If you want a separate launcher for the mod, add this before MODPATH:"
 echo "STEAM_COMPAT_DATA_PATH="$STEAM/compatdata/32470" %command%"
 echo "================================================================================"
-read -p "Press Enter to close this window..."
+read -p "Press Enter to finish the program..."

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mega_Files>
+  <Info Name="MyMod" Version="0.0.1" />
+  <File>Data\Config.meg</File>
+  <File>Data\Shaders.meg</File>
+  <File>Data\Maps.meg</File>
+  <File>Data\Movies.meg</File>
+  <File>Data\Models.meg</File>
+  <File>Data\EnglishSpeech.meg</File>
+  <File>Data\Textures.meg</File>
+  <File>Data\Music.meg</File>
+</Mega_Files>

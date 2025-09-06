@@ -1,4 +1,5 @@
 # Requirements
+* Need to run the base game and Foc at least one (activate proton in the compatibility tab on the game properties on Steam)
 * An EAW mod already downloaded by the Steam Workshop (duh)
 * Rsync
   * Rsync is a tool for copying/moving/transfer files with extra options and features
@@ -7,8 +8,10 @@
   * Wine is the original translation tool to run windows apps on Linux which Proton is based on
   * Check if you have it by open a terminal and type ``` wine --version ```
   * Proton from steam doesn't count, you need wine on its own (important to note that in order to play games on steam with Proton you don't need Wine, you just need Wine so a specific tool to pack the files in .megs can run) 
+  * Flatpak version of Wine won´t work
 
-To install them, on a terminal anywhere:
+To install them, open a terminal anywhere and use the package management system command of your system:
+Examples:
 | DEBIAN                    | ARCH                    | FEDORA                 | 
 | --------------------      | ----------------------- | ------             --- | 
 | sudo apt install rsync    |   sudo pacman -S rsync  | sudo dnf install rsync |
@@ -16,8 +19,9 @@ To install them, on a terminal anywhere:
 
 
 * Wine Mono
-  * If you ran winecfg at least once after installing wine, you should have it
-  * Check if you have it by open an terminal from your username folder and type ``` ls ~/.wine/drive_c/windows/mono/ ```
+  * If you ran ```winecfg``` on a terminal at least once after installing wine, you should have it
+  * Check if you have it by navigating to  ```personalfolder/.wine/drive_c/windows/mono/ ``` you should see mono 2.0 or similar
+  * Or faster by copy pasting this on an terminal open from your username folder ``` ls ~/.wine/drive_c/windows/mono/ ```
 
 After running winecfg, you should see window with different tabs and settings that looks from Windows
 
