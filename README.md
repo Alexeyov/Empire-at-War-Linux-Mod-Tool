@@ -1,19 +1,19 @@
 # Empire At War Linux ModTool
 This repository is home to the EAW_LMT tool to pack eaw mods fast and fix/improve perfomance issues particular to linux, as well as other troubleshooting tips to improve the Empire at War experience on linux distros
 
-
 # Index
+
+- [Requirements](#requirements)
+- [Using EAW_LMT](#using-eaw_lmt)
+- [Troubleshooting](#troubleshooting)
+- [EAW Game font](#eaw-game-font)
+- [Other EAW tips](#other-eaw-tips)
 - [Linux Concepts](#linux-concepts)
   - [State of EAW on Linux](#state-of-eaw-on-linux)
   - [Steam Location](#steam-location)
   - [Compatdata and Saves location](#compatdata-and-saves-location)
   - [Different Linux OS](#different-linux-os)
   - [Installing from terminal](#installing-from-terminal)
-- [Requirements](#requirements)
-- [Using EAW_LMT](#using-eaw_lmt)
-- [Troubleshooting](#troubleshooting)
-- [EAW Game font](#eaw-game-font)
-- [Other EAW tips](#other-eaw-tips)
 - [Credits](#credits)
 
 # Introduction
@@ -34,6 +34,95 @@ What does the tool do?
 *(In the case of Textures, some files that share the same name of base game files need to be loose, this however do not impact performance)
 
 [Back to Index](#index)
+
+# Requirements
+If you are not familiar with Linux distros at all, you may need to check on some of the info on [Linux Concepts](#linux-concepts) when installing the requirements. I recommend you to check it before continuing.
+
+* Need to run the base game and Foc at least one (activate proton in the compatibility tab on the game properties on Steam)
+* An EAW mod already downloaded by the Steam Workshop (duh)
+* Rsync
+  * Rsync is a tool for copying/moving/transfer files with extra options and features
+  * Check if you have it by open a terminal and type ``` rsync --version ```
+* Wine
+  * Wine is the compatibility layer to run windows apps on Linux which Proton is based on
+  * Check if you have it by open a terminal and type ``` wine --version ```
+  * The Flatpak version of Wine WON´T work for this.
+  * Proton from steam doesn't count, you need wine on its own (important to note that in order to play games on steam with Proton you don't need Wine, you just need Wine so a specific tool to pack the files in .megs can run) 
+
+To install them, on a terminal anywhere: 
+| DEBIAN                                                | ARCH                                 | FEDORA                               | 
+| --------------------------------------------------- | -------------------------------------------- | -------------------------------------------- | 
+| sudo apt install rsync    |   sudo pacman -S rsync  | sudo dnf install rsync |
+| sudo apt install wine    |   sudo pacman -S wine  | sudo dnf install wine |
+
+* Wine Mono
+  * If you ran ```winecfg``` on a terminal at least once after installing wine, you should have it
+  * Check if you have it by navigating to  ```personalfolder/.wine/drive_c/windows/mono/ ``` you should see mono 2.0 or similar
+  * Or faster by copy pasting this on an terminal open from your username folder ``` ls ~/.wine/drive_c/windows/mono/ ```
+
+After running winecfg, you should see this window, you can close it once you see it
+
+![winecfg](https://github.com/user-attachments/assets/17212ab3-0602-486e-ab50-08801a806a32)
+
+If after running winecfg, mono doesn´t show after doing ``` ls ~/.wine/drive_c/windows/mono/ ```, either:
+  * Reinstall wine and run ```winecfg``` again.
+  * After installing wine, do ```wine --version``` on a terminal, then go to https://dl.winehq.org/wine/wine-mono/ to download the .msi file for your wine version.
+      * Install this file by running the following command on a terminal located in the same location as the file: ```wine msiexec -i  wine-mono-10.1.0-x86.msi``` (replace wine-mono-10.1.0-x86.msi with the file name you may have)
+
+[Back to Index](#index)
+
+# Using EAW_LMT
+* This tool is only needed for the big mods, submods usually don´t have the amount of texture/model files that would bring the game down on Proton.
+* Once downloaded from [releases](https://github.com/Alexeyov/Empire-at-War-Linux-Mod-Tool/releases), extract the content anywhere.
+* Check the location of the EAW mod you want to process, EAW mods are located in ```/steamapps/workshop/content/32470```
+* Copy or move the ```EAW_LMT``` folder next to the Data folder of the EAW mod (the folder, not the files)
+* Inside the ```EAW_LMT``` folder you will see a ```EAWM_BUILD.sh``` file, either:
+  * Open a terminal in that location (usually right clicking in the file explorer should show the option) and type: ```bash EAWM_build.sh```
+  * Change the permission of the file to be allowed to be run as a programm and double click on it (select to run in a terminal if the option shows up)
+* Wait and let it do it's thing.
+* Either because it completes all operations or something went wrong, you will see the following ```Press Enter to finish the program...```
+* If everythign was fine, you now has a local mod and you will need to set your launch options with ```MODPATH=Mods/``` instead of ```STEAMMOD=``` This local mod is located at ```/steamapps/common/Star Wars Empire at War/corruption/Mods``` within the steam folder
+# Troubleshooting
+* Most problems will be related to some requirement that wasn't fullfiled
+* For any problem a ```EAWM_log.txt``` file should show up in the same location, if the problem is not clear, feel free to open an issue on this git uploading the log.
+
+[Back to Index](#index)
+# EAW Game font
+In the process of researching the reason of modded EAW's poor perfomance I was able to create a fix to the game's font not loading properly.
+There is an odd interaction where Proton returns the correct font back to the game, but does it by giving back the family-name value of the font, while the game is waiting for the type-name. 
+A copy of a "tweaked" version of the font can be found [here](https://www.dropbox.com/scl/fi/cn94vw9mjuq0rt6s95z3z/EaW-Font-Proton.zip?rlkey=sxbg6dio45en9a2vox1dhwt3d&st=cn13oylc&dl=0)
+In order to make the game load the new font, do the following:
+* Extract the fonts
+* Check what proton version you are using for EAW
+* Go to the path directory of that proton version. Proton folders are located in the same steam folder as your games in ```steamapps/common```
+  *  Unless you are using a custom one in which case is probably in ```compatibilitytools.d``` on the base Steam folder   
+* Inside the proton folder, paste the fonts at ```files/share/fonts```
+
+[Back to Index](#index)
+
+# Other EAW tips
+## Custom launcher for mods
+
+![EawMods](https://github.com/user-attachments/assets/50acc8f8-02d1-4908-a7d9-8370bcaf4491)
+
+In order to add a custom launcher on steam for EAW mods. After you add StarWarsG.exe as a non steam game, you need to do the following:
+
+In the settings of that new shorcut, check the compatibility tab:
+![CheckCompat2](https://github.com/user-attachments/assets/74c1c931-5867-4de0-b702-9b4cdb1c18c0)
+
+In the shorcut tab, in the launch options, you need to add the following BEFORE ```Modpath=Mods/mod```
+
+DEBIAN
+```STEAM_COMPAT_DATA_PATH="$HOME/.steam/debian-installation/steamapps/compatdata/32470" %command% Modpath=Mods/mod```
+ARCH & FEDORA
+```STEAM_COMPAT_DATA_PATH="$HOME/.local/share/Steam/steamapps/compatdata/32470" %command% Modpath=Mods/mod```
+
+For other distros I recommend to manualy search for the location in your file explorer, and once you are at ```compatdata/32470```, copy the path and past it
+
+![LaunchOpt](https://github.com/user-attachments/assets/79a1e4b9-b4dc-4f24-aff9-699f4b46691f)
+
+[Back to Index](#index)
+
 
 # Linux Concepts
 Some concept clarification in order to follow the instructions easier. 
@@ -77,92 +166,6 @@ Known Exceptions:
 
 Installing rsync for example on Linux Mint:
 ```sudo apt install rsync```  
-[Back to Index](#index)
-# Requirements
-* Need to run the base game and Foc at least one (activate proton in the compatibility tab on the game properties on Steam)
-* An EAW mod already downloaded by the Steam Workshop (duh)
-* Rsync
-  * Rsync is a tool for copying/moving/transfer files with extra options and features
-  * Check if you have it by open a terminal and type ``` rsync --version ```
-* Wine
-  * Wine is the compatibility layer to run windows apps on Linux which Proton is based on
-  * Check if you have it by open a terminal and type ``` wine --version ```
-  * The Flatpak version of Wine WON´T work for this.
-  * Proton from steam doesn't count, you need wine on its own (important to note that in order to play games on steam with Proton you don't need Wine, you just need Wine so a specific tool to pack the files in .megs can run) 
-
-To install them, on a terminal anywhere:
-| DEBIAN                                                | ARCH                                 | FEDORA                               | 
-| --------------------------------------------------- | -------------------------------------------- | -------------------------------------------- | 
-| sudo apt install rsync    |   sudo pacman -S rsync  | sudo dnf install rsync |
-| sudo apt install wine    |   sudo pacman -S wine  | sudo dnf install wine |
-
-
-* Wine Mono
-  * If you ran ```winecfg``` on a terminal at least once after installing wine, you should have it
-  * Check if you have it by navigating to  ```personalfolder/.wine/drive_c/windows/mono/ ``` you should see mono 2.0 or similar
-  * Or faster by copy pasting this on an terminal open from your username folder ``` ls ~/.wine/drive_c/windows/mono/ ```
-
-After running winecfg, you should see this window, you can close it once you see it
-
-![winecfg](https://github.com/user-attachments/assets/17212ab3-0602-486e-ab50-08801a806a32)
-
-If after running winecfg, mono doesn´t show after doing ``` ls ~/.wine/drive_c/windows/mono/ ```, either:
-  * Reinstall wine and run ```winecfg``` again.
-  * After installing wine, do ```wine --version``` on a terminal, then go to https://dl.winehq.org/wine/wine-mono/ to download the .msi file for your wine version.
-      * Install this file by running the following command on a terminal located in the same location as the file: ```wine msiexec -i  wine-mono-10.1.0-x86.msi``` (replace wine-mono-10.1.0-x86.msi with the file name you may have)
-
-[Back to Index](#index)
-
-# Using EAW_LMT
-* This tool is only needed for the big mods, submods usually don´t have the amount of texture/model files that would bring the game down on Proton.
-* Once downloaded from [releases](https://github.com/Alexeyov/Empire-at-War-Linux-Mod-Tool/releases), extract the content anywhere.
-* Check the location of the EAW mod you want to process, EAW mods are located in ```/steamapps/workshop/content/32470```
-* Copy or move the ```EAW_LMT``` folder next to the Data folder of the EAW mod (the folder, not the files)
-* Inside the ```EAW_LMT``` folder you will see a ```EAWM_BUILD.sh``` file, either:
-  * Open a terminal in that location (usually right clicking in the file explorer should show the option) and type: ```bash EAWM_build.sh```
-  * Change the permission of the file to be allowed to be run as a programm and double click on it (select to run in a terminal if the option shows up)
-* Wait and let it do it's thing.
-* Either because it completes all operations or something went wrong, you will see the following ```Press Enter to finish the program...```
-* If everythign was fine, you now has a local mod and you will need to set your launch options with ```MODPATH=Mods/``` instead of ```STEAMMOD=```
-# Troubleshooting
-* Most problems will be related to some requirement that wasn't fullfiled
-* For any problem a ```EAWM_log.txt``` file should show up in the same location, if the problem is not clear, feel free to open an issue on this git uploading the log.
-
-[Back to Index](#index)
-# EAW Game font
-In the process of researching the reason of modded EAW's poor perfomance I was able to create a fix to the game's font not loading properly.
-There is an odd interaction where Proton returns the correct font back to the game, but does it by giving back the family-name value of the font, while the game is waiting for the type-name. 
-A copy of a "tweaked" version of the font can be found [here](https://www.dropbox.com/scl/fi/cn94vw9mjuq0rt6s95z3z/EaW-Font-Proton.zip?rlkey=sxbg6dio45en9a2vox1dhwt3d&st=cn13oylc&dl=0)
-In order to make the game load the new font, do the following:
-* Extract the fonts
-* Check what proton version you are using for EAW
-* Go to the path directory of that proton version. Proton folders are located in the same steam folder as your games in ```steamapps/common```
-  *  Unless you are using a custom one in which case is probably in ```compatibilitytools.d``` on the base Steam folder   
-* Inside the proton folder, paste the fonts at ```files/share/fonts```
-
-[Back to Index](#index)
-
-# Other EAW tips
-## Custom launcher for mods
-
-![EawMods](https://github.com/user-attachments/assets/50acc8f8-02d1-4908-a7d9-8370bcaf4491)
-
-In order to add a custom launcher on steam for EAW mods. After you add StarWarsG.exe as a non steam game, you need to do the following:
-
-In the settings of that new shorcut, check the compatibility tab:
-![CheckCompat2](https://github.com/user-attachments/assets/74c1c931-5867-4de0-b702-9b4cdb1c18c0)
-
-In the shorcut tab, in the launch options, you need to add the following BEFORE ```Modpath=Mods/mod```
-
-DEBIAN
-```STEAM_COMPAT_DATA_PATH="$HOME/.steam/debian-installation/steamapps/compatdata/32470" %command% Modpath=Mods/mod```
-ARCH & FEDORA
-```STEAM_COMPAT_DATA_PATH="$HOME/.local/share/Steam/steamapps/compatdata/32470" %command% Modpath=Mods/mod```
-
-For other distros I recommend to manualy search for the location in your file explorer, and once you are at ```compatdata/32470```, copy the path and past it
-
-![LaunchOpt](https://github.com/user-attachments/assets/79a1e4b9-b4dc-4f24-aff9-699f4b46691f)
-
 [Back to Index](#index)
 
 # Credits
