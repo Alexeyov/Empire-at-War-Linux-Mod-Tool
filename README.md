@@ -81,7 +81,7 @@ If after running winecfg, mono doesn´t show after doing ``` ls ~/.wine/drive_c/
   * Change the permission of the file to be allowed to be run as a programm and double click on it (select to run in a terminal if the option shows up)
 * Wait and let it do it's thing.
 * Either because it completes all operations or something went wrong, you will see the following ```Press Enter to finish the program...```
-* If everythign was fine, you now have a local mod and you will need to set your launch options with ```MODPATH=Mods/``` instead of ```STEAMMOD=``` This local mod is located at ```/steamapps/common/Star Wars Empire at War/corruption/Mods``` within the steam folder
+* If everything was fine, you now have a local mod and you will need to set your launch options with ```MODPATH=Mods/``` instead of ```STEAMMOD=``` This local mod is located at ```/steamapps/common/Star Wars Empire at War/corruption/Mods``` within the steam folder
 # Troubleshooting
 * Most problems will be related to some requirement that wasn't fullfiled
 * For any problem a ```EAWM_log.txt``` file should show up in the same location, if the problem is not clear, feel free to open an issue on this git uploading the log.
