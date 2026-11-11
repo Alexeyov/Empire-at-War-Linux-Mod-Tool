@@ -15,8 +15,8 @@ STAGE_MOD_COPY()
     echo "Staging a copy of the mod so the Steam Workshop files stay untouched"
     if ! cp -al "$mod_data_dir" "$staged_mod_dir/" 2> /dev/null; then
         echo "Hard links unavailable, copying the mod instead"
-        rm -rf "${staged_mod_dir:?}"/*
-        cp -a "$mod_data_dir" "$staged_mod_dir/"
+        find "$staged_mod_dir" -mindepth 1 -maxdepth 1 -exec rm -rf -- {} + || return 1
+        cp -a "$mod_data_dir" "$staged_mod_dir/" || return 1
     fi
     CAPITAL "$staged_mod_dir"
     NORMALIZE_MEGAFILES_XML_NAME "$staged_mod_dir/DATA"

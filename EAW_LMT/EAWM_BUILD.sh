@@ -99,9 +99,15 @@ INITIAL_CHECK
 echo -e "PROCESSING "$MOD_NAME" MOD FOLDER"
 STAGED_MOD_DIR=$(mktemp -d "$STEAM/eaw_lmt_stage.XXXXXX") || exit 1
 trap 'rm -rf "$STAGED_MOD_DIR"' EXIT
-STAGE_MOD_COPY "$DATA_FOLDER" "$STAGED_MOD_DIR"
+if ! STAGE_MOD_COPY "$DATA_FOLDER" "$STAGED_MOD_DIR"; then
+    echo "ERROR: Failed to stage the mod. See $LOG_FILE for details."
+    exit 1
+fi
 mkdir -p "$STAGED_MOD_DIR/EAW_LMT"
-cp -a "${TOOL[@]}" "$STAGED_MOD_DIR/EAW_LMT/"
+if ! cp -a "${TOOL[@]}" "$STAGED_MOD_DIR/EAW_LMT/"; then
+    echo "ERROR: Failed to stage the tool. See $LOG_FILE for details."
+    exit 1
+fi
 sleep 0.5
 if ! (cd "$STAGED_MOD_DIR/EAW_LMT" && bash PROCESSOR.sh "$MOD_NAME" "$STAGED_MOD_DIR/DATA"); then
     echo "================================================================================"
