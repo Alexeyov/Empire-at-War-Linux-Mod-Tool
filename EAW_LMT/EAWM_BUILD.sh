@@ -5,6 +5,8 @@
 # "By Alexey Skywalker "
 # "================================================================================"
 
+cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")" || exit 1
+
 source Utilities.sh
 
 TOOL=("PROCESSOR.sh" "file_arrays.sh" "Utilities.sh" "yvaw-build.exe" "build.cfg" "basemegafiles.xml")
@@ -95,13 +97,11 @@ echo "==========================================================================
 sleep 0.5
 INITIAL_CHECK
 echo -e "PROCESSING "$MOD_NAME" MOD FOLDER"
-CAPITAL
-mainmega=$(find ../DATA -type f -iname "megafiles.xml")
-mainmega=$(basename "$mainmega")
-lowermega=$(LOWERCASE "$mainmega")
-mv -v "../DATA/$mainmega" "../DATA/$lowermega"
+STAGED_MOD_DIR=$(mktemp -d "$STEAM/eaw_lmt_stage.XXXXXX")
+trap 'rm -rf "$STAGED_MOD_DIR"' EXIT
+STAGE_MOD_COPY "$DATA_FOLDER" "$STAGED_MOD_DIR"
 sleep 0.5
-if ! bash PROCESSOR.sh "$MOD_NAME"; then
+if ! bash PROCESSOR.sh "$MOD_NAME" "$STAGED_MOD_DIR/DATA"; then
     echo "================================================================================"
     echo "PACKING FAILED, the mod in Mods/$MOD_NAME is incomplete. See $LOG_FILE for details."
     echo "================================================================================"

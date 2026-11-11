@@ -9,6 +9,7 @@ source file_arrays.sh
 source Utilities.sh
 
 MOD_NAME=$1
+MOD_DATA=$2
 DEST=""
 CFG="./build.cfg"
 MEGA_BASE="./basemegafiles.xml"
@@ -33,17 +34,17 @@ SETUP()
 #SCRIPT STARTS
 SETUP
 sleep 1.0
-VANILLA_CHECK "../DATA" "$DEST" "$MOD_NAME"
+VANILLA_CHECK "$MOD_DATA" "$DEST" "$MOD_NAME"
 echo "Copying over miscellaneous files"
-rsync -a --progress --exclude='ART/MODELS' --exclude='ART/TEXTURES' --exclude='megafiles.xml' "../DATA/" "$F_DEST"
-rsync -a --include='*.jpg' --include='*.png' --include="*/" --exclude='*' "../DATA/ART/TEXTURES" "$F_DEST/ART"
+rsync -a --progress --exclude='ART/MODELS' --exclude='ART/TEXTURES' --exclude='megafiles.xml' "$MOD_DATA/" "$F_DEST"
+rsync -a --include='*.jpg' --include='*.png' --include="*/" --exclude='*' "$MOD_DATA/ART/TEXTURES" "$F_DEST/ART"
 echo "Packing Files"
-COPY_CONTENT "TEMP/DATA/ART/TEXTURES" "TEMP/TEXTURES" "DATA/ART/TEXTURES" 0 $CFG "$F_DEST"
-COPY_CONTENT "../DATA/ART/MODELS" "TEMP/MODELS" "DATA/ART/MODELS" 0 $CFG "$F_DEST"
+COPY_CONTENT "TEMP/DATA/ART/TEXTURES" "TEMP/TEXTURES" "DATA/ART/TEXTURES" $CFG "$F_DEST"
+COPY_CONTENT "$MOD_DATA/ART/MODELS" "TEMP/MODELS" "DATA/ART/MODELS" $CFG "$F_DEST"
 
 MOVE_MEGS "$F_DEST"
 
-EDIT_MEGA "../DATA/megafiles.xml" "$MEGA_BASE" "$F_DEST"
+EDIT_MEGA "$MOD_DATA/megafiles.xml" "$MEGA_BASE" "$F_DEST"
 rm -r ./TEMP
 rm -r ./_log
 echo -e "\n"
