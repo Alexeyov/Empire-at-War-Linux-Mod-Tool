@@ -13,6 +13,30 @@ TOOL=("PROCESSOR.sh" "file_arrays.sh" "Utilities.sh" "yvaw-build.exe" "build.cfg
 script_dir=$PWD
 STEAM="${PWD%%/steamapps/*}/steamapps"
 MOD_NAME=$(basename "$(dirname "$script_dir")")
+BASE_MOD=""
+
+PARSE_ARGUMENTS()
+{
+    while (( $# > 0 )); do
+        case $1 in
+            --base-mod)
+                [[ -n "${2:-}" ]] || REJECT_USAGE "--base-mod needs the folder name of a packed mod in Mods"
+                BASE_MOD=$2
+                shift 2
+                ;;
+            *)
+                REJECT_USAGE "Unknown option: $1"
+                ;;
+        esac
+    done
+}
+
+REJECT_USAGE()
+{
+    echo "$1"
+    echo "Usage: bash EAWM_BUILD.sh [--base-mod <packed mod folder in Mods>]"
+    exit 1
+}
 
 INITIAL_CHECK()
 {
@@ -81,6 +105,8 @@ CHECK_FILE()
     echo "$TOOL_FILE is present"
 }
 
+PARSE_ARGUMENTS "$@"
+
 LOG_FILE="$STEAM/eaw_lmt_logs/$MOD_NAME.log"
 mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -109,7 +135,7 @@ if ! cp -a "${TOOL[@]}" "$STAGED_MOD_DIR/EAW_LMT/"; then
     exit 1
 fi
 sleep 0.5
-if ! (cd "$STAGED_MOD_DIR/EAW_LMT" && bash PROCESSOR.sh "$MOD_NAME" "$STAGED_MOD_DIR/DATA"); then
+if ! (cd "$STAGED_MOD_DIR/EAW_LMT" && bash PROCESSOR.sh "$MOD_NAME" "$STAGED_MOD_DIR/DATA" "$BASE_MOD"); then
     echo "================================================================================"
     echo "PACKING FAILED, the mod in Mods/$MOD_NAME is incomplete. See $LOG_FILE for details."
     echo "================================================================================"
@@ -120,7 +146,7 @@ fi
 echo -e "\n"
 echo "================================================================================"
 echo "ALL OPERATIONS EXECUTED SUCCESFULLY, REMEMBER TO SET YOUR LAUNCH OPTIONS TO:"
-echo "MODPATH=Mods/$MOD_NAME"
+cat "$(MODS_DIR)/$MOD_NAME/launch_options.txt"
 echo "If you want a separate launcher for the mod, add this before MODPATH:"
 echo "STEAM_COMPAT_DATA_PATH="$STEAM/compatdata/32470" %command%"
 echo "================================================================================"

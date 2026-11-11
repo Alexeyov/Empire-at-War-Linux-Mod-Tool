@@ -7,6 +7,25 @@
 
 source file_arrays.sh
 
+MODS_DIR()
+{
+    echo "${PWD%%/steamapps/*}/steamapps/common/Star Wars Empire at War/corruption/Mods"
+}
+
+PRINT_LAUNCH_OPTIONS()
+{
+    local mod_name=$1
+    local base_mod=$2
+    local base_launch_options
+
+    if [[ -z "$base_mod" ]]; then
+        echo "MODPATH=Mods/$mod_name"
+    else
+        base_launch_options="$(MODS_DIR)/$base_mod/launch_options.txt"
+        echo "MODPATH=Mods/$mod_name $(cat "$base_launch_options")"
+    fi
+}
+
 STAGE_MOD_COPY()
 {
     local mod_data_dir=$1
@@ -195,6 +214,7 @@ REQUIRE_MEG_BUILT_IN()
 MOVE_MEGS() {
     SOURCE_DIR="TEMP/"
     TARGET_DIR=$1
+    local meg_prefix=$2
 
     if [[ ! -d "$SOURCE_DIR" ]]; then
         echo "Source directory not found: $SOURCE_DIR"
@@ -202,7 +222,7 @@ MOVE_MEGS() {
     fi
 
     find "$SOURCE_DIR" -type f -name '*.meg' | while read -r filepath; do
-        filename=$(basename "$filepath")
+        filename="$meg_prefix$(basename "$filepath")"
         base="${filename%.*}"
         ext="${filename##*.}"
         dest="$TARGET_DIR/$filename"
@@ -223,41 +243,84 @@ MOVE_MEGS() {
 LIST_PACKED_MEGS_AS_XML()
 {
     local mod_data_dir=$1
+    local meg_prefix=$2
 
-    find "$mod_data_dir" -maxdepth 1 -type f -iname 'mod_*.meg' -printf '%f\n' \
+    find "$mod_data_dir" -maxdepth 1 -type f -iname "${meg_prefix}*.meg" -printf '%f\n' \
         | sort -V \
         | awk '{ print "  <File>Data\\" $0 "</File>" }'
 }
 
+PRINT_INHERITED_MANIFEST()
+{
+    local mod_xml=$1
+    local template_xml=$2
+    local base_mod_xml=$3
+
+    if [[ -f "$mod_xml" && -n "$base_mod_xml" ]]; then
+        PRINT_WITH_BASE_MOD_MEGS_BEFORE_OWN_MEGS "$mod_xml" "$base_mod_xml"
+    elif [[ -f "$mod_xml" ]]; then
+        cat "$mod_xml"
+    elif [[ -n "$base_mod_xml" ]]; then
+        cat "$base_mod_xml"
+    else
+        cat "$template_xml"
+    fi
+}
+
+PRINT_WITH_BASE_MOD_MEGS_BEFORE_OWN_MEGS()
+{
+    local mod_xml=$1
+    local base_mod_xml=$2
+
+    awk -v mod_xml="$mod_xml" -v base_mod_xml="$base_mod_xml" '
+        function entry_key(line,    key) {
+            key = tolower(line)
+            gsub(/[ \t\r]/, "", key)
+            return key
+        }
+        BEGIN {
+            while ((getline line < mod_xml) > 0) {
+                if (line ~ /<File>/) in_mod[entry_key(line)] = 1
+            }
+            while ((getline line < base_mod_xml) > 0) {
+                if (line !~ /<File>/) continue
+                in_base[entry_key(line)] = 1
+                if (!(entry_key(line) in in_mod)) missing_from_mod[++missing_count] = line
+            }
+        }
+        !inserted && ((/<File>/ && !(entry_key($0) in in_base)) || /<\/Mega_Files>/) {
+            for (i = 1; i <= missing_count; i++) {
+                print missing_from_mod[i]
+            }
+            inserted = 1
+        }
+        { print }
+    ' "$mod_xml"
+}
+
 EDIT_MEGA()
 {
-    MAIN_XML=$1
-    BASE_XML=$2
-    DEST=$3
+    local inherited_xml=$1
+    local meg_prefix=$2
+    local mod_data_dir=$3
+    local packed_megs_xml
+    local merged_xml
 
-    FIRST_PART=""
+    packed_megs_xml=$(mktemp)
+    LIST_PACKED_MEGS_AS_XML "$mod_data_dir" "$meg_prefix" > "$packed_megs_xml"
 
-    if [ -f "$MAIN_XML" ]; then
-        FIRST_PART="$MAIN_XML"
-    else
-        FIRST_PART="$BASE_XML"
-    fi
+    merged_xml=$(mktemp)
 
-    new_lines=$(mktemp)
-    LIST_PACKED_MEGS_AS_XML "$DEST" > "$new_lines"
-
-    temp_file=$(mktemp)
-
-    awk -v packed_megs="$new_lines" '
+    awk -v packed_megs="$packed_megs_xml" '
         /<\/Mega_Files>/ {
             while ((getline meg < packed_megs) > 0) {
                 print meg
             }
         }
         { print }
-    ' "$FIRST_PART" > "$temp_file"
+    ' "$inherited_xml" > "$merged_xml"
 
-    mv "$temp_file" "$DEST/megafiles.xml"
-    echo "megafiles.xml created successfully with $(wc -l < "$new_lines") packed megs."
-    rm "$new_lines"
+    mv "$merged_xml" "$mod_data_dir/megafiles.xml"
+    echo "megafiles.xml created successfully with $(wc -l < "$packed_megs_xml") packed megs."
+    rm "$packed_megs_xml"
 }
