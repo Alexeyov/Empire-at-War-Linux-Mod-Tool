@@ -157,6 +157,18 @@ Pack_func()
     SOURCE=$1
     echo "Running Yvaw-build.exe for ${SOURCE}"
     wine cmd /c ".\\yvaw-build.exe cook" "$SOURCE" "$SOURCE"
+    REQUIRE_MEG_BUILT_IN "$SOURCE"
+}
+
+REQUIRE_MEG_BUILT_IN()
+{
+    local build_dir=$1
+
+    if ! compgen -G "$build_dir/DATA/*.meg" > /dev/null; then
+        echo "ERROR: yvaw-build.exe produced no .meg in $build_dir."
+        echo "A 'Could not load Mono' error above means Wine Mono is missing or broken."
+        exit 1
+    fi
 }
 
 MOVE_MEGS() {
@@ -187,12 +199,20 @@ MOVE_MEGS() {
     echo "DONE. ALL .MEG FILES MOVED TO: $TARGET_DIR"
 }
 
+LIST_PACKED_MEGS_AS_XML()
+{
+    local mod_data_dir=$1
+
+    find "$mod_data_dir" -maxdepth 1 -type f -iname 'mod_*.meg' -printf '%f\n' \
+        | sort -V \
+        | awk '{ print "  <File>Data\\" $0 "</File>" }'
+}
+
 EDIT_MEGA()
 {
     MAIN_XML=$1
-    MODED_XML=$2
-    BASE_XML=$3
-    DEST=$4
+    BASE_XML=$2
+    DEST=$3
 
     FIRST_PART=""
 
@@ -203,22 +223,21 @@ EDIT_MEGA()
     fi
 
     new_lines=$(mktemp)
-    awk '/<Mega_Files>/,/<\/Mega_Files>/' "$MODED_XML" | grep "<File>" > "$new_lines"
+    LIST_PACKED_MEGS_AS_XML "$DEST" > "$new_lines"
 
-    # Temporary output
     temp_file=$(mktemp)
 
     awk '
         FNR==NR { new_lines[NR] = $0; next }
         /<\/Mega_Files>/ {
             for (i = 1; i <= length(new_lines); i++) {
-                print "\t" new_lines[i]
+                print new_lines[i]
             }
         }
         { print }
     ' "$new_lines" "$FIRST_PART" > "$temp_file"
 
     mv "$temp_file" "$DEST/megafiles.xml"
-
-    echo "megafiles.xml created successfully."
+    echo "megafiles.xml created successfully with $(wc -l < "$new_lines") packed megs."
+    rm "$new_lines"
 }

@@ -11,7 +11,6 @@ source Utilities.sh
 MOD_NAME=$1
 DEST=""
 CFG="./build.cfg"
-MEGA_MOD="./modmegafiles.xml"
 MEGA_BASE="./basemegafiles.xml"
 
 SETUP()
@@ -44,7 +43,7 @@ COPY_CONTENT "../DATA/ART/MODELS" "TEMP/MODELS" "DATA/ART/MODELS" 0 $CFG "$F_DES
 
 MOVE_MEGS "$F_DEST"
 
-EDIT_MEGA "../DATA/megafiles.xml" "$MEGA_MOD" "$MEGA_BASE" "$F_DEST"
+EDIT_MEGA "../DATA/megafiles.xml" "$MEGA_BASE" "$F_DEST"
 rm -r ./TEMP
 rm -r ./_log
 echo -e "\n"

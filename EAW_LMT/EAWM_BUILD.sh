@@ -7,7 +7,7 @@
 
 source Utilities.sh
 
-TOOL=("PROCESSOR.sh" "file_arrays.sh" "Utilities.sh" "yvaw-build.exe" "build.cfg" "modmegafiles.xml" "basemegafiles.xml")
+TOOL=("PROCESSOR.sh" "file_arrays.sh" "Utilities.sh" "yvaw-build.exe" "build.cfg" "basemegafiles.xml")
 MOD_NAME="EAWMOD"
 
 INITIAL_CHECK()
@@ -101,7 +101,13 @@ mainmega=$(basename "$mainmega")
 lowermega=$(LOWERCASE "$mainmega")
 mv -v "../DATA/$mainmega" "../DATA/$lowermega"
 sleep 0.5
-bash PROCESSOR.sh "$MOD_NAME"
+if ! bash PROCESSOR.sh "$MOD_NAME"; then
+    echo "================================================================================"
+    echo "PACKING FAILED, the mod in Mods/$MOD_NAME is incomplete. See $LOG_FILE for details."
+    echo "================================================================================"
+    read -p "Press Enter to close this window..."
+    exit 1
+fi
 
 echo -e "\n"
 echo "================================================================================"
