@@ -61,8 +61,8 @@ INITIAL_CHECK()
         echo "      After installing wine, run winecfg in a terminal and let it do its work"
         echo "Afterwards open a new terminal in your home folder, then"
         echo "run ls ~/.wine/drive_c/windows/mono/ , you should see mono2.0 or similar, mono is REQUIRED to run this program"
-        read -p "Press Enter to close this window..."
-        exit
+        WAIT_FOR_ENTER "Press Enter to close this window..."
+        exit 1
     fi
 
     if ! command -v rsync &> /dev/null; then
@@ -73,7 +73,7 @@ INITIAL_CHECK()
         echo "      Arch distros: sudo pacman -S rsync"
         echo "      Fedora distros: sudo dnf install rsync"
         echo "IMPORTANT: Please check what command is used by your system"
-        read -p "Press Enter to close this window..."
+        WAIT_FOR_ENTER "Press Enter to close this window..."
         exit 1
     fi
     echo "rsync is installed"
@@ -83,8 +83,8 @@ INITIAL_CHECK()
     DATA_FOLDER=$(find ../ -maxdepth 1 -type d -iname "data")
     if [ ! -d "$DATA_FOLDER" ]; then
         echo "WARNING: Data Folder not preset, Aborting. Please relocate the pack tools folder next to the Data folder of a mod."
-        read -p "Press Enter to close this window..."
-        exit
+        WAIT_FOR_ENTER "Press Enter to close this window..."
+        exit 1
     fi
 
     for element in "${TOOL[@]}"; do
@@ -103,11 +103,16 @@ CHECK_FILE()
         if [ $TOOL_FILE == "yvaw-build.exe" ]; then
             echo "If you did´t download yvaw-build.exe. Please go to WEBSITE."
         fi
-        read -p "Press Enter to close this window..."
-       exit
+        WAIT_FOR_ENTER "Press Enter to close this window..."
+        exit 1
     fi
 
     echo "$TOOL_FILE is present"
+}
+
+WAIT_FOR_ENTER()
+{
+    read -r -p "$1" || true
 }
 
 PARSE_ARGUMENTS "$@"
@@ -127,7 +132,7 @@ echo "By Alexey Skywalker "
 echo "================================================================================"
 sleep 0.5
 INITIAL_CHECK
-echo -e "PROCESSING "$MOD_NAME" MOD FOLDER"
+echo "PROCESSING $MOD_NAME MOD FOLDER"
 STAGED_MOD_DIR=$(mktemp -d "$STEAM/eaw_lmt_stage.XXXXXX") || exit 1
 trap 'rm -rf "$STAGED_MOD_DIR"' EXIT
 if ! STAGE_MOD_COPY "$DATA_FOLDER" "$STAGED_MOD_DIR"; then
@@ -144,7 +149,7 @@ if ! (cd "$STAGED_MOD_DIR/EAW_LMT" && bash PROCESSOR.sh "$MOD_NAME" "$STAGED_MOD
     echo "================================================================================"
     echo "PACKING FAILED, the mod in Mods/$MOD_NAME is incomplete. See $LOG_FILE for details."
     echo "================================================================================"
-    read -p "Press Enter to close this window..."
+    WAIT_FOR_ENTER "Press Enter to close this window..."
     exit 1
 fi
 
@@ -153,6 +158,6 @@ echo "==========================================================================
 echo "ALL OPERATIONS EXECUTED SUCCESFULLY, REMEMBER TO SET YOUR LAUNCH OPTIONS TO:"
 cat "$(MODS_DIR)/$MOD_NAME/launch_options.txt"
 echo "If you want a separate launcher for the mod, add this before MODPATH:"
-echo "STEAM_COMPAT_DATA_PATH="$STEAM/compatdata/32470" %command%"
+echo "STEAM_COMPAT_DATA_PATH=\"$STEAM/compatdata/32470\" %command%"
 echo "================================================================================"
-read -p "Press Enter to finish the program..."
+WAIT_FOR_ENTER "Press Enter to finish the program..."

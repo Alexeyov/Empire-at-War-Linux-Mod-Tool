@@ -91,7 +91,7 @@ VANILLA_CHECK()
 
 CHECK_REPEATED_FILE()
 {
-    ARRAY=$1[@]
+    ARRAY="$1[@]"
     LIST=("${!ARRAY}")
     SEARCH_DIR=$2
     DEST=$3
