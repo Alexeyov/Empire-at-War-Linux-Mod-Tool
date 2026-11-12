@@ -5,6 +5,7 @@ This repository is home to the EAW_LMT tool to pack eaw mods fast and fix/improv
 
 - [Requirements](#requirements)
 - [Using EAW_LMT](#using-eaw_lmt)
+  - [Submods](#submods)
 - [Troubleshooting](#troubleshooting)
 - [EAW Game font](#eaw-game-font)
 - [Other EAW tips](#other-eaw-tips)
@@ -82,9 +83,19 @@ If after running winecfg, mono doesn´t show after doing ``` ls ~/.wine/drive_c/
 * Wait and let it do it's thing.
 * Either because it completes all operations or something went wrong, you will see the following ```Press Enter to finish the program...```
 * If everythign was fine, you now has a local mod and you will need to set your launch options with ```MODPATH=Mods/``` instead of ```STEAMMOD=``` This local mod is located at ```/steamapps/common/Star Wars Empire at War/corruption/Mods``` within the steam folder
+
+## Submods
+A submod loaded on top of a packed base mod also has to be a local mod, otherwise its own ```megafiles.xml``` hides the base mod's packed megs and the game crashes after loading.
+* Pack the base mod with this version first; the submod needs both its ```megafiles.xml``` and its ```launch_options.txt```.
+* Put ```EAW_LMT``` next to the submod's Data folder and run it with the base mod's folder name in ```Mods```, for example: ```bash EAWM_BUILD.sh --base-mod 1770851727```
+* Repeat for a submod of that submod, passing the previous submod as ```--base-mod```.
+* A submod that works with several base mods needs one copy per base. Give each copy its own folder in ```Mods``` with ```--name```, for example: ```bash EAWM_BUILD.sh --base-mod 1125571106 --name ShieldPierce_TR``` and ```bash EAWM_BUILD.sh --base-mod 1976399102 --name ShieldPierce_FotR```
+* List every mod in the launch options, the topmost submod first, for example: ```MODPATH=Mods/3553154402 MODPATH=Mods/2794270450 MODPATH=Mods/1770851727```. The tool prints this line at the end and saves it in ```Mods/<mod>/launch_options.txt```.
+
+[Back to Index](#index)
 # Troubleshooting
 * Most problems will be related to some requirement that wasn't fullfiled
-* For any problem a ```EAWM_log.txt``` file should show up in the same location, if the problem is not clear, feel free to open an issue on this git uploading the log.
+* For any problem, check ```steamapps/eaw_lmt_logs/<mod folder name>.log```. If the cause is unclear, include that log in an issue.
 
 [Back to Index](#index)
 # EAW Game font
