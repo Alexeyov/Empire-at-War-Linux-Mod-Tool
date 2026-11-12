@@ -24,6 +24,11 @@ PARSE_ARGUMENTS()
                 BASE_MOD=$2
                 shift 2
                 ;;
+            --name)
+                [[ "${2:-}" =~ ^[A-Za-z0-9_.-]+$ && "$2" != "." && "$2" != ".." ]] || REJECT_USAGE "--name needs a folder name made of letters, digits, '.', '_' or '-'"
+                MOD_NAME=$2
+                shift 2
+                ;;
             *)
                 REJECT_USAGE "Unknown option: $1"
                 ;;
@@ -34,7 +39,7 @@ PARSE_ARGUMENTS()
 REJECT_USAGE()
 {
     echo "$1"
-    echo "Usage: bash EAWM_BUILD.sh [--base-mod <packed mod folder in Mods>]"
+    echo "Usage: bash EAWM_BUILD.sh [--base-mod <packed mod folder in Mods>] [--name <output folder in Mods>]"
     exit 1
 }
 

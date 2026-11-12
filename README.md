@@ -89,6 +89,7 @@ A submod loaded on top of a packed base mod also has to be a local mod, otherwis
 * Pack the base mod with this version first; the submod needs both its ```megafiles.xml``` and its ```launch_options.txt```.
 * Put ```EAW_LMT``` next to the submod's Data folder and run it with the base mod's folder name in ```Mods```, for example: ```bash EAWM_BUILD.sh --base-mod 1770851727```
 * Repeat for a submod of that submod, passing the previous submod as ```--base-mod```.
+* A submod that works with several base mods needs one copy per base. Give each copy its own folder in ```Mods``` with ```--name```, for example: ```bash EAWM_BUILD.sh --base-mod 1125571106 --name ShieldPierce_TR``` and ```bash EAWM_BUILD.sh --base-mod 1976399102 --name ShieldPierce_FotR```
 * List every mod in the launch options, the topmost submod first, for example: ```MODPATH=Mods/3553154402 MODPATH=Mods/2794270450 MODPATH=Mods/1770851727```. The tool prints this line at the end and saves it in ```Mods/<mod>/launch_options.txt```.
 
 [Back to Index](#index)
