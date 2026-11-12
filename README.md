@@ -84,7 +84,7 @@ If after running winecfg, mono doesn´t show after doing ``` ls ~/.wine/drive_c/
 * If everythign was fine, you now has a local mod and you will need to set your launch options with ```MODPATH=Mods/``` instead of ```STEAMMOD=``` This local mod is located at ```/steamapps/common/Star Wars Empire at War/corruption/Mods``` within the steam folder
 # Troubleshooting
 * Most problems will be related to some requirement that wasn't fullfiled
-* For any problem a ```EAWM_log.txt``` file should show up in the same location, if the problem is not clear, feel free to open an issue on this git uploading the log.
+* For any problem, check ```steamapps/eaw_lmt_logs/<mod folder name>.log```. If the cause is unclear, include that log in an issue.
 
 [Back to Index](#index)
 # EAW Game font

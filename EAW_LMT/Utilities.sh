@@ -7,9 +7,26 @@
 
 source file_arrays.sh
 
+STAGE_MOD_COPY()
+{
+    local mod_data_dir=$1
+    local staged_mod_dir=$2
+
+    echo "Staging a copy of the mod so the Steam Workshop files stay untouched"
+    if ! cp -al "$mod_data_dir" "$staged_mod_dir/" 2> /dev/null; then
+        echo "Hard links unavailable, copying the mod instead"
+        find "$staged_mod_dir" -mindepth 1 -maxdepth 1 -exec rm -rf -- {} + || return 1
+        cp -a "$mod_data_dir" "$staged_mod_dir/" || return 1
+    fi
+    CAPITAL "$staged_mod_dir"
+    NORMALIZE_MEGAFILES_XML_NAME "$staged_mod_dir/DATA"
+}
+
 CAPITAL()
 {
-    find ../ -depth -type d | while IFS= read -r dir; do
+    local root_dir=$1
+
+    find "$root_dir" -mindepth 1 -depth -type d | while IFS= read -r dir; do
         base=$(basename "$dir")
         parent=$(dirname "$dir")
         newname=$(uppercase_folder "$base")
@@ -25,10 +42,15 @@ uppercase_folder() {
     echo "${name^^}"
 }
 
-LOWERCASE()
+NORMALIZE_MEGAFILES_XML_NAME()
 {
-    local name="$1"
-    echo "${name,,}"
+    local data_dir=$1
+    local megafiles_xml
+
+    megafiles_xml=$(find "$data_dir" -maxdepth 1 -type f -iname "megafiles.xml")
+    if [[ -n "$megafiles_xml" && "$megafiles_xml" != "$data_dir/megafiles.xml" ]]; then
+        mv -v "$megafiles_xml" "$data_dir/megafiles.xml"
+    fi
 }
 
 VANILLA_CHECK()
@@ -85,9 +107,8 @@ COPY_CONTENT()
     SOURCE_DIR=$1
     DEST_BASE=$2
     SUBDIR_NAME=$3
-    MODE=$4
-    BUILD_FILE=$5
-    F_DEST=$6
+    BUILD_FILE=$4
+    F_DEST=$5
 
     MAX_FILES=1200             
     MAX_SIZE=1500000000  
@@ -96,22 +117,15 @@ COPY_CONTENT()
 
     SOURCE_DIR=$(realpath "$SOURCE_DIR")
 
-    # CHECKING IF IT IS WORTH TO PACK IN THE FIRST PLACE
-    if [[ "$MODE" == "1" ]]; then
-        echo "Using recursive mode: including subdirectories"
-        mapfile -t REL_PATHS < <(cd "$SOURCE_DIR" && find . -type f | sort -V)
-        TOTAL_FILES=${#REL_PATHS[@]}
-    else
-        mapfile -t REL_PATHS < <(cd "$SOURCE_DIR" && find . -maxdepth 1 -type f | sort -V)
-        TOTAL_FILES=${#REL_PATHS[@]}
-    fi
+    mapfile -t REL_PATHS < <(cd "$SOURCE_DIR" && find . -type f | sort -V)
+    TOTAL_FILES=${#REL_PATHS[@]}
 
     if (( TOTAL_FILES == 0 )); then
       echo "No files found in the source directory."
       return 1
     elif (( TOTAL_FILES < 250)); then
       echo "Low number of files in directory, copying folder instead"
-      rsync -a --progress "$SOURCE_DIR" "$F_DEST"
+      rsync -a --progress "$SOURCE_DIR" "$F_DEST/ART/"
       return 1
     fi
 
@@ -123,7 +137,8 @@ COPY_CONTENT()
     echo "Copying cfg"
     cp "$BUILD_FILE" "$DEST_BASE/folder_$FOLDER_INDEX/build.cfg"
 
-    for file in "$SOURCE_DIR"/*; do
+    for rel_path in "${REL_PATHS[@]}"; do
+        file="$SOURCE_DIR/$rel_path"
         # get size of file in bytes
         size=$(stat -c%s "$file")
 
@@ -140,7 +155,8 @@ COPY_CONTENT()
             cp "$BUILD_FILE" "$DEST_BASE/folder_$FOLDER_INDEX/build.cfg"
         fi
 
-        cp "$file" "$TARGET/"
+        mkdir -p "$TARGET/${rel_path%/*}"
+        cp "$file" "$TARGET/$rel_path"
         FILE_COUNT=$((FILE_COUNT+1))
         FOLDER_SIZE=$((FOLDER_SIZE+size))
     done
@@ -156,7 +172,24 @@ Pack_func()
 {
     SOURCE=$1
     echo "Running Yvaw-build.exe for ${SOURCE}"
-    wine cmd /c ".\\yvaw-build.exe cook" "$SOURCE" "$SOURCE"
+    wine cmd /c ".\\yvaw-build.exe cook" "$SOURCE" "$SOURCE" || ABORT_PACKING "yvaw-build.exe failed for $SOURCE."
+    REQUIRE_MEG_BUILT_IN "$SOURCE"
+}
+
+ABORT_PACKING()
+{
+    echo "ERROR: $1"
+    echo "A 'Could not load Mono' error above means Wine Mono is missing or broken."
+    exit 1
+}
+
+REQUIRE_MEG_BUILT_IN()
+{
+    local build_dir=$1
+
+    if ! compgen -G "$build_dir/DATA/*.meg" > /dev/null; then
+        ABORT_PACKING "yvaw-build.exe produced no .meg in $build_dir."
+    fi
 }
 
 MOVE_MEGS() {
@@ -187,12 +220,20 @@ MOVE_MEGS() {
     echo "DONE. ALL .MEG FILES MOVED TO: $TARGET_DIR"
 }
 
+LIST_PACKED_MEGS_AS_XML()
+{
+    local mod_data_dir=$1
+
+    find "$mod_data_dir" -maxdepth 1 -type f -iname 'mod_*.meg' -printf '%f\n' \
+        | sort -V \
+        | awk '{ print "  <File>Data\\" $0 "</File>" }'
+}
+
 EDIT_MEGA()
 {
     MAIN_XML=$1
-    MODED_XML=$2
-    BASE_XML=$3
-    DEST=$4
+    BASE_XML=$2
+    DEST=$3
 
     FIRST_PART=""
 
@@ -203,22 +244,20 @@ EDIT_MEGA()
     fi
 
     new_lines=$(mktemp)
-    awk '/<Mega_Files>/,/<\/Mega_Files>/' "$MODED_XML" | grep "<File>" > "$new_lines"
+    LIST_PACKED_MEGS_AS_XML "$DEST" > "$new_lines"
 
-    # Temporary output
     temp_file=$(mktemp)
 
-    awk '
-        FNR==NR { new_lines[NR] = $0; next }
+    awk -v packed_megs="$new_lines" '
         /<\/Mega_Files>/ {
-            for (i = 1; i <= length(new_lines); i++) {
-                print "\t" new_lines[i]
+            while ((getline meg < packed_megs) > 0) {
+                print meg
             }
         }
         { print }
-    ' "$new_lines" "$FIRST_PART" > "$temp_file"
+    ' "$FIRST_PART" > "$temp_file"
 
     mv "$temp_file" "$DEST/megafiles.xml"
-
-    echo "megafiles.xml created successfully."
+    echo "megafiles.xml created successfully with $(wc -l < "$new_lines") packed megs."
+    rm "$new_lines"
 }

@@ -5,10 +5,14 @@
 # "By Alexey Skywalker "
 # "================================================================================"
 
+cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")" || exit 1
+
 source Utilities.sh
 
-TOOL=("PROCESSOR.sh" "file_arrays.sh" "Utilities.sh" "yvaw-build.exe" "build.cfg" "modmegafiles.xml" "basemegafiles.xml")
-MOD_NAME="EAWMOD"
+TOOL=("PROCESSOR.sh" "file_arrays.sh" "Utilities.sh" "yvaw-build.exe" "build.cfg" "basemegafiles.xml")
+script_dir=$PWD
+STEAM="${PWD%%/steamapps/*}/steamapps"
+MOD_NAME=$(basename "$(dirname "$script_dir")")
 
 INITIAL_CHECK()
 {
@@ -46,8 +50,6 @@ INITIAL_CHECK()
     echo "rsync is installed"
 
 	echo "CHECKING TOOLS"
-    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    STEAM="${PWD%%/steamapps/*}/steamapps"
 
     DATA_FOLDER=$(find ../ -maxdepth 1 -type d -iname "data")
     if [ ! -d "$DATA_FOLDER" ]; then
@@ -59,7 +61,6 @@ INITIAL_CHECK()
     for element in "${TOOL[@]}"; do
         CHECK_FILE $element
     done
-    MOD_NAME="$(basename "$(dirname "$script_dir")")"
     echo -e "CHECK COMPLETE. PROCEEDING \n"
 }
 
@@ -80,7 +81,8 @@ CHECK_FILE()
     echo "$TOOL_FILE is present"
 }
 
-LOG_FILE="EAWM_log.txt"
+LOG_FILE="$STEAM/eaw_lmt_logs/$MOD_NAME.log"
+mkdir -p "$(dirname "$LOG_FILE")"
 
 if [[ -z "$LOGGING_ACTIVE" ]]; then
     export LOGGING_ACTIVE=1
@@ -95,13 +97,25 @@ echo "==========================================================================
 sleep 0.5
 INITIAL_CHECK
 echo -e "PROCESSING "$MOD_NAME" MOD FOLDER"
-CAPITAL
-mainmega=$(find ../DATA -type f -iname "megafiles.xml")
-mainmega=$(basename "$mainmega")
-lowermega=$(LOWERCASE "$mainmega")
-mv -v "../DATA/$mainmega" "../DATA/$lowermega"
+STAGED_MOD_DIR=$(mktemp -d "$STEAM/eaw_lmt_stage.XXXXXX") || exit 1
+trap 'rm -rf "$STAGED_MOD_DIR"' EXIT
+if ! STAGE_MOD_COPY "$DATA_FOLDER" "$STAGED_MOD_DIR"; then
+    echo "ERROR: Failed to stage the mod. See $LOG_FILE for details."
+    exit 1
+fi
+mkdir -p "$STAGED_MOD_DIR/EAW_LMT"
+if ! cp -a "${TOOL[@]}" "$STAGED_MOD_DIR/EAW_LMT/"; then
+    echo "ERROR: Failed to stage the tool. See $LOG_FILE for details."
+    exit 1
+fi
 sleep 0.5
-bash PROCESSOR.sh "$MOD_NAME"
+if ! (cd "$STAGED_MOD_DIR/EAW_LMT" && bash PROCESSOR.sh "$MOD_NAME" "$STAGED_MOD_DIR/DATA"); then
+    echo "================================================================================"
+    echo "PACKING FAILED, the mod in Mods/$MOD_NAME is incomplete. See $LOG_FILE for details."
+    echo "================================================================================"
+    read -p "Press Enter to close this window..."
+    exit 1
+fi
 
 echo -e "\n"
 echo "================================================================================"
