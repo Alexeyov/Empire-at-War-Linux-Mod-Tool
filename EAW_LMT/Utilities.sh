@@ -80,7 +80,7 @@ VANILLA_CHECK()
 
     echo "Copying TEXTURES, it will take a bit"
     mkdir -p "TEMP/DATA/ART/"
-    rsync -a --progress --exclude='ICONS' "$ORIGIN/ART/TEXTURES" "TEMP/DATA/ART/"
+    rsync -a --progress "$ORIGIN/ART/TEXTURES" "TEMP/DATA/ART/"
     echo "TEXTURES copied"
     echo "Checking for Vanilla files in TEXTURES, it will take a bit"
     #TEXTURE FOLDER  
